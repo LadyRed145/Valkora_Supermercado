@@ -1,14 +1,16 @@
 <div align="center">
 
-<img src="src/assets/valkora-basket.webp" alt="Cesta de productos de Valkora" width="320">
+<img src="Semana%201/src/assets/valkora-basket.webp" alt="Cesta de productos de Valkora" width="360">
 
 # 👑 VALKORA · SUPERMERCADOS
 
-### Desarrollo Frontend II · PFY2202 · Semana 1 · Evaluación Formativa 1
+### Desarrollo Frontend II · PFY2202 · Semana 1
 
-**Supermercado ficticio con React, React Router y un inventario interactivo de demostración.**
+**Supermercado ficticio desarrollado con React, React Router, JavaScript, HTML y CSS.**
 
 *Calidad que nos distingue.*
+
+[📁 Repositorio Valkora](https://github.com/LadyRed145/Valkora_Supermercado)
 
 </div>
 
@@ -16,44 +18,44 @@
 
 ## ✦ Visión general
 
-**Valkora** es una aplicación de supermercado creada para demostrar la navegación entre distintas pantallas mediante **React Router** y un **menú inferior**. Además del contenido requerido, su portada incluye un inventario de productos y un carrito lateral con una **compra simulada** que actualiza las existencias de forma local.
+**Valkora** es una aplicación de supermercado con tres pantallas conectadas mediante **React Router** y un menú inferior. Su página principal presenta un inventario de demostración y permite seleccionar artículos, administrarlos desde un carrito lateral y confirmar compras simuladas que descuentan unidades del stock.
 
-El proyecto utiliza una identidad visual *Royal Iridescence*: ciruela, burdeo, marfil, dorado y reflejos nacarados. **Todos los datos son ficticios**; el sitio no realiza ventas ni pagos reales.
+El diseño utiliza la identidad visual **Royal Iridescence**, con tonos ciruela, burdeo, marfil, dorado y reflejos nacarados. Los productos, las sucursales y sus datos son ficticios. **No se procesan pagos ni pedidos reales.**
 
-| 🏠 Inicio | 🏬 Nuestras tiendas | ❔ Preguntas frecuentes | 🛒 Carrito lateral |
+| 🏠 Inicio | 🏬 Nuestras tiendas | ❔ Preguntas frecuentes | 🛒 Mi carrito |
 |:---:|:---:|:---:|:---:|
-| Inventario y métricas | 3 sucursales ficticias | Información del sitio | Compra simulada |
+| Inventario y métricas | 3 sucursales ficticias | 4 respuestas informativas | Panel lateral deslizante |
 
-### Funcionalidades de esta versión
+### Funcionalidades implementadas
 
-- ⚛️ Aplicación React + Vite con **tres rutas** y menú inferior activo.
-- 📦 Catálogo de **6 productos de demostración** y estados dinámicos de existencias.
-- ☑️ Selección individual o de todos los productos disponibles.
-- 🛒 Carrito **offcanvas a la derecha**, abierto desde un botón flotante con contador.
-- ➕➖ Control de cantidades, eliminación de productos y vaciado del carrito.
-- ✅ Confirmación de compra **simulada**, con descuento de unidades del inventario.
-- 🔁 Actualización automática del resumen y de las etiquetas de stock.
-- 💾 Persistencia local de inventario y carrito mediante `localStorage`.
-- ↩️ Restablecimiento del inventario inicial con confirmación.
-- ✨ Diseño tornasolado adaptable a escritorio y móvil, con soporte para movimiento reducido.
+- ⚛️ Tres rutas con **React Router** y menú inferior que identifica la pantalla activa.
+- 📦 Inventario inicial de **6 productos**, con unidades disponibles y estados de stock derivados de las existencias.
+- ☑️ Selección individual y selección conjunta de productos disponibles.
+- 🛒 Carrito lateral derecho con botón flotante y contador de unidades.
+- ➕➖ Aumento y disminución de cantidades, eliminación de artículos y vaciado del carrito.
+- ✅ **Compra simulada** con validación de cantidades y descuento de existencias.
+- 🔁 Actualización de indicadores y etiquetas del inventario después de la compra.
+- 💾 Conservación local del inventario y del carrito mediante `localStorage`.
+- ↩️ Restablecimiento del inventario original con confirmación.
+- ✨ Efectos dorados y tornasolados, estilos adaptables y soporte para movimiento reducido.
 
 ---
 
-## 🧭 Navegación con React Router
+## 🧭 Navegación
 
-| Pantalla | Ruta | Contenido |
+| Página | Ruta | Contenido |
 |---|---|---|
-| 🏠 Inicio | `/` | Presentación, indicadores, inventario y carrito |
-| 🏬 Nuestras tiendas | `/tiendas` | Valkora Norte, Centro y Costa |
-| ❔ Preguntas frecuentes | `/preguntas-frecuentes` | Consultas frecuentes sobre esta demostración |
+| 🏠 Inicio | `/` | Portada, indicadores, inventario y acceso al carrito |
+| 🏬 Nuestras tiendas | `/tiendas` | Valkora Norte, Valkora Centro y Valkora Costa |
+| ❔ Preguntas frecuentes | `/preguntas-frecuentes` | Inventario, sucursales, stock y compra simulada |
 
-`BrowserRouter` envuelve la aplicación en `src/main.jsx`, `App.jsx` define las rutas y `BottomNav.jsx` utiliza `NavLink` para identificar la pantalla activa. La navegación se realiza sin recargar el documento completo.
+La navegación utiliza `BrowserRouter` en `main.jsx`, `Routes` y `Route` en `App.jsx`, y `NavLink` en `BottomNav.jsx`. La cabecera y el menú permanecen visibles mientras cambia el contenido de la página.
 
 ---
 
-## 📦 Inventario y estados
+## 📦 Inventario de productos
 
-Los productos base se declaran en `src/data/products.js`:
+Los datos iniciales están definidos en `products.js`.
 
 | Producto | Categoría | Stock inicial |
 |---|---|---:|
@@ -64,59 +66,71 @@ Los productos base se declaran en `src/data/products.js`:
 | Pan de molde | Panadería | 8 |
 | Huevos (12 unidades) | Huevos | 23 |
 
-| Estado | Condición |
+El estado de cada producto se calcula mediante `getStockStatus()` y el umbral `LOW_STOCK_THRESHOLD`:
+
+| Estado | Existencias |
 |---|---|
 | **Disponible** | Más de 8 unidades |
 | **Stock bajo** | Entre 1 y 8 unidades |
 | **Agotado** | 0 unidades |
 
-El umbral de **stock bajo** se centraliza mediante `LOW_STOCK_THRESHOLD`, para que las etiquetas y el contador del resumen utilicen la misma regla.
-
-### Flujo del carrito y la compra simulada
-
-```text
-Productos disponibles (products.js)
-                 ↓
-     Selección desde Home.jsx
-                 ↓
-       useValkoraShop.js
-                 ↓
-   Carrito lateral (CartPanel.jsx)
-                 ↓
-  Ajustar cantidades / quitar / vaciar
-                 ↓
-        Confirmar compra simulada
-                 ↓
-   Validar cantidades disponibles
-                 ↓
-  Descontar stock + vaciar carrito
-                 ↓
-  Recalcular indicadores y estados
-                 ↓
- Guardar estado local (localStorage)
-```
-
-Un producto agotado no se puede añadir al carrito; el botón `+` se deshabilita al alcanzar las unidades disponibles. **Seleccionar** un producto no descuenta existencias: el descuento se realiza al **confirmar la compra simulada**.
-
-### 🛒 Carrito lateral
-
-El carrito se abre desde un botón flotante y entra suavemente por el **costado derecho**. Se puede cerrar usando **×**, haciendo clic en el fondo oscurecido o presionando **Escape**. Mientras está abierto se bloquea el desplazamiento de la página de fondo y se controla el foco del teclado.
-
-Se adapta a pantallas pequeñas y respeta la preferencia del sistema `prefers-reduced-motion`.
+Las tarjetas de **Total de productos**, **Con existencias** y **Stock bajo** se calculan a partir del inventario actual, no de cifras fijas. Un producto agotado no puede agregarse al carrito.
 
 ---
 
-## 💾 Persistencia de demostración
+## 🛒 Carrito lateral y compra simulada
 
-El hook `useValkoraShop.js` almacena el estado local bajo la clave:
+El botón flotante **Mi carrito** abre un panel desde el lado derecho. El panel muestra los productos seleccionados, las unidades de cada uno, los totales de artículos diferentes y unidades, y las acciones disponibles.
+
+Permite:
+
+- Agregar productos desde la tabla de inventario.
+- Aumentar o disminuir cantidades sin superar las existencias actuales.
+- Quitar un artículo o vaciar el carrito completo.
+- Confirmar una compra simulada y descontar sus unidades del inventario.
+- Cerrar el panel con **×**, con un clic fuera de él o con la tecla **Escape**.
+
+Mientras el panel está abierto, se bloquea el desplazamiento de la página de fondo y se gestiona el foco para la navegación con teclado.
+
+### Flujo funcional
+
+```text
+Inventario inicial (products.js)
+             ↓
+   Selección en Home.jsx
+             ↓
+    useValkoraShop.js
+             ↓
+  Carrito lateral (CartPanel.jsx)
+             ↓
+   Ajustar o quitar unidades
+             ↓
+    Confirmar compra simulada
+             ↓
+   Validar stock disponible
+             ↓
+  Descontar unidades y vaciar carrito
+             ↓
+  Recalcular estados e indicadores
+             ↓
+   Persistir datos en localStorage
+```
+
+**Seleccionar un producto no modifica el stock.** Las unidades solo se descuentan cuando se confirma la compra simulada. No se calculan precios ni se realizan cobros.
+
+---
+
+## 💾 Persistencia local
+
+El estado se administra en el hook `useValkoraShop.js` y se conserva bajo la clave:
 
 ```text
 valkora:supermercado:demo:v1
 ```
 
-Guarda **cantidades de inventario y carrito**, no un historial comercial. Al restaurar los datos, valida los identificadores y las cantidades para evitar valores fuera de los límites del catálogo.
+Se almacenan las cantidades actuales del inventario y las cantidades del carrito. Al recuperar información guardada, el código valida los identificadores y limita las cantidades a los valores aceptados por el catálogo.
 
-**Restablecer inventario demo** recupera las cantidades originales y vacía el carrito. La información queda únicamente en el navegador utilizado; no existe una base de datos ni sincronización entre dispositivos o usuarios.
+El botón **Restablecer inventario demo** pide confirmación y recupera las cantidades iniciales, dejando el carrito vacío. La información permanece en el navegador utilizado: no hay base de datos, backend, pagos ni sincronización entre usuarios o dispositivos.
 
 ---
 
@@ -124,126 +138,82 @@ Guarda **cantidades de inventario y carrito**, no un historial comercial. Al res
 
 | Archivo | Responsabilidad |
 |---|---|
-| `src/App.jsx` | Estructura general y rutas |
-| `src/components/BottomNav.jsx` | Menú inferior con enlaces activos |
-| `src/components/BrandMark.jsx` | Emblema vectorial de Valkora |
-| `src/components/MetricIcon.jsx` | Íconos de las tarjetas de inventario |
-| `src/components/CartPanel.jsx` | Interfaz del carrito lateral y accesibilidad del panel |
-| `src/hooks/useValkoraShop.js` | Estado, persistencia, validaciones y compra simulada |
-| `src/data/products.js` | Catálogo base y regla de estado de stock |
-| `src/pages/Home.jsx` | Portada, métricas y selección de productos |
-| `src/pages/Stores.jsx` | Tres sucursales de demostración |
-| `src/pages/FAQ.jsx` | Preguntas frecuentes |
-| `src/styles/index.css` | Estilos y adaptaciones responsive |
+| `App.jsx` | Estructura compartida, rutas y redirección de rutas desconocidas |
+| `main.jsx` | Montaje de React y configuración de `BrowserRouter` |
+| `components/BottomNav.jsx` | Menú inferior y enlaces activos |
+| `components/BrandMark.jsx` | Emblema SVG de la marca |
+| `components/MetricIcon.jsx` | Iconografía del resumen de inventario |
+| `components/CartPanel.jsx` | Carrito lateral, controles y gestión del foco |
+| `hooks/useValkoraShop.js` | Estado del carrito, validaciones, persistencia y compra simulada |
+| `data/products.js` | Datos iniciales y función para clasificar el stock |
+| `pages/Home.jsx` | Portada, indicadores y selección de productos |
+| `pages/Stores.jsx` | Información de las tres sucursales |
+| `pages/FAQ.jsx` | Cuatro preguntas frecuentes |
+| `styles/index.css` | Estilos generales, efectos visuales y adaptación de pantallas |
 
-### Hooks y eventos principales
+### Hooks y mecanismos utilizados
 
-| Recurso | Uso |
+| Recurso | Uso en Valkora |
 |---|---|
-| `useState` | Estado del carrito, inventario y apertura del panel |
-| `useEffect` | Persistencia y gestión de eventos del panel lateral |
-| `useRef` | Control y restauración del foco del carrito |
-| `useCallback` | Referencia estable al cierre del panel |
-| `onClick` | Carrito, cantidades, compra y restablecimiento |
-| `onChange` | Selección de productos |
-| `localStorage` | Persistencia únicamente local |
+| `useState` | Estado de la tienda y apertura del carrito |
+| `useEffect` | Persistencia y eventos del panel lateral |
+| `useRef` | Foco del carrito y restauración del foco anterior |
+| `useCallback` | Función estable de cierre del carrito |
+| `onClick` | Acciones del carrito y restablecimiento |
+| `onChange` | Casillas de selección de productos |
+| `createPortal` | Renderizado del carrito fuera del árbol visual principal |
+| `localStorage` | Persistencia local de inventario y carrito |
 
 ---
 
-## 🗂️ Estructura del proyecto
+## 🗂️ Estructura publicada en GitHub
 
 <details>
-<summary><strong>Ver estructura de archivos</strong></summary>
+<summary><strong>Ver archivos del repositorio</strong></summary>
 
 ```text
 Valkora_Supermercado/
-├── .gitignore
 ├── README.md
 ├── index.html
 ├── package.json
 ├── package-lock.json
 ├── vite.config.js
-└── src/
-    ├── main.jsx
-    ├── App.jsx
-    ├── assets/
-    │   └── valkora-basket.webp
-    ├── components/
-    │   ├── BottomNav.jsx
-    │   ├── BrandMark.jsx
-    │   ├── CartPanel.jsx
-    │   └── MetricIcon.jsx
-    ├── data/
-    │   └── products.js
-    ├── hooks/
-    │   └── useValkoraShop.js
-    ├── pages/
-    │   ├── Home.jsx
-    │   ├── Stores.jsx
-    │   └── FAQ.jsx
-    └── styles/
-        └── index.css
+└── Semana 1/
+    └── src/
+        ├── App.jsx
+        ├── main.jsx
+        ├── assets/
+        │   └── valkora-basket.webp
+        ├── components/
+        │   ├── BottomNav.jsx
+        │   ├── BrandMark.jsx
+        │   ├── CartPanel.jsx
+        │   └── MetricIcon.jsx
+        ├── data/
+        │   └── products.js
+        ├── hooks/
+        │   └── useValkoraShop.js
+        ├── pages/
+        │   ├── Home.jsx
+        │   ├── Stores.jsx
+        │   └── FAQ.jsx
+        └── styles/
+            └── index.css
 ```
 
 </details>
 
 ---
 
-## ✨ Identidad visual y adaptabilidad
+## ✨ Identidad visual
 
-- **Ciruela y burdeo:** encabezado, portada y navegación inferior.
-- **Marfil:** fondos y superficies de lectura.
-- **Dorado:** logotipo, botones, bordes y detalles.
-- **Tornasol nacarado:** acentos lavanda, rosa perlado y reflejos suaves.
-- **Brillos animados:** detalles decorativos que se desactivan cuando se prefiere movimiento reducido.
+La estética **Royal Iridescence** combina un encabezado y un menú inferior en ciruela y burdeo, superficies marfil, detalles dorados y reflejos perlados. Incluye un emblema SVG, una imagen decorativa de una cesta con productos, destellos animados y acabados cromáticos en secciones y tarjetas.
 
-La tabla de inventario mantiene desplazamiento horizontal **dentro de su contenedor** cuando el ancho de pantalla es reducido; el carrito lateral se ajusta al espacio disponible.
+La interfaz contempla pantallas pequeñas: la tabla permite desplazamiento horizontal dentro de su contenedor y el carrito lateral adapta su ancho. Las reglas CSS de `prefers-reduced-motion` reducen las transiciones y animaciones cuando el sistema así lo solicita.
 
 ---
 
-## 🚀 Instalación y ejecución
-
-**Requisito:** Node.js compatible con Vite 7 (Node **20.19+** o **22.12+**) y npm.
-
-Desde la raíz del proyecto:
-
-```bash
-npm ci
-npm run dev
-```
-
-Abrir la URL mostrada en la terminal (habitualmente `http://localhost:5173/`).
-
-### Compilación de producción
-
-```bash
-npm run build
-npm run preview
-```
-
-> `node_modules/` y `dist/` no se incluyen en el repositorio: se generan al instalar dependencias y compilar.
-
----
-
-## ✅ QA y verificación previa a la entrega
-
-| Comprobación | Resultado esperado |
-|---|---|
-| Las tres páginas abren correctamente | ✅ |
-| El menú inferior identifica la vista activa | ✅ |
-| El carrito aparece como panel lateral derecho | ✅ |
-| Se pueden sumar, restar y eliminar productos | ✅ |
-| No se permite superar el stock disponible | ✅ |
-| Confirmar compra descuenta existencias | ✅ |
-| El inventario y el carrito persisten al recargar | ✅ |
-| Restablecer recupera las cantidades iniciales | ✅ |
-| La compilación de producción termina sin errores | ✅ |
-
-Los indicadores representan comprobaciones de funcionamiento del proyecto; **no se declara una suite de pruebas automatizadas incluida**, porque esta versión no la incorpora.
-
----
-
-## 🧰 Tecnologías
+## 🧰 Tecnologías utilizadas
 
 <div align="center">
 
@@ -253,24 +223,8 @@ Los indicadores representan comprobaciones de funcionamiento del proyecto; **no 
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
 <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
 <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
-<img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git">
-<img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
 
 </div>
-
----
-
-## 📁 Entrega académica
-
-La actividad formativa solicita disponibilizar el código fuente en un repositorio GitHub con el nombre:
-
-```text
-supermercado-natalia-alvarado-PFY2202
-```
-
-Tras publicar, **compartir la URL del repositorio con el docente**. No se requiere backend, servidor de pagos ni despliegue web para cumplir el enunciado entregado.
-
-> **Si en el futuro se publica en GitHub Pages:** el sitio utiliza `BrowserRouter`; las rutas directas como `/tiendas` necesitarán una estrategia de fallback/redirección en ese alojamiento. Esto no afecta la entrega del repositorio de código.
 
 ---
 
