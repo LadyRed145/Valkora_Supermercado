@@ -1,12 +1,12 @@
 <div align="center">
 
-<img src="Semana%201/src/assets/valkora-basket.webp" alt="Cesta de productos de Valkora" width="360">
+<img src="Semana%202/src/assets/valkora-basket.webp" alt="Cesta de productos de Valkora" width="360">
 
 # 👑 VALKORA · SUPERMERCADOS
 
-### Desarrollo Frontend II · PFY2202 · Semana 1
+### Desarrollo Frontend II · PFY2202 · Semana 2
 
-**Supermercado ficticio desarrollado con React, React Router, JavaScript, HTML y CSS.**
+**Supermercado ficticio desarrollado con React, React Router, Context API, Bootstrap 5.3.6 y CSS personalizado.**
 
 *Calidad que nos distingue.*
 
@@ -18,25 +18,31 @@
 
 ## ✦ Visión general
 
-**Valkora** es una aplicación de supermercado con tres pantallas conectadas mediante **React Router** y un menú inferior. Su página principal presenta un inventario de demostración y permite seleccionar artículos, administrarlos desde un carrito lateral y confirmar compras simuladas que descuentan unidades del stock.
+**Valkora** es una aplicación de supermercado con cinco pantallas conectadas mediante **React Router** y un menú inferior. Su página principal presenta un inventario de demostración y permite seleccionar artículos, administrarlos desde un carrito lateral y confirmar compras simuladas que descuentan unidades del stock.
+
+La Semana 2 continúa la Semana 1: incorpora un estado global compartido, una pantalla para registrar artículos y otra para consultar la tabla completa del inventario. Los artículos nuevos también se integran al carrito.
 
 El diseño utiliza la identidad visual **Royal Iridescence**, con tonos ciruela, burdeo, marfil, dorado y reflejos nacarados. Los productos, las sucursales y sus datos son ficticios. **No se procesan pagos ni pedidos reales.**
 
-| 🏠 Inicio | 🏬 Nuestras tiendas | ❔ Preguntas frecuentes | 🛒 Mi carrito |
-|:---:|:---:|:---:|:---:|
-| Inventario y métricas | 3 sucursales ficticias | 4 respuestas informativas | Panel lateral deslizante |
+| 🏠 Inicio | 🏬 Nuestras tiendas | ❔ Preguntas frecuentes | ➕ Registrar artículo | 📦 Inventario |
+|:---:|:---:|:---:|:---:|:---:|
+| Inventario y carrito | 3 sucursales ficticias | 4 respuestas | Formulario con validación | Tabla global de artículos |
 
 ### Funcionalidades implementadas
 
-- ⚛️ Tres rutas con **React Router** y menú inferior que identifica la pantalla activa.
-- 📦 Inventario inicial de **6 productos**, con unidades disponibles y estados de stock derivados de las existencias.
+- ⚛️ Cinco rutas con **React Router** y menú inferior que identifica la pantalla activa.
+- 🧠 **Context API** para compartir el inventario y el carrito entre las pantallas.
+- ➕ Formulario de registro de artículos con **nombre, marca, tipo y stock**, validación, comprobación de duplicados y confirmación.
+- 📋 Tabla de inventario completa con nombre, marca, tipo, stock y estado.
+- 🎨 **Bootstrap 5.3.6** (CSS incluido localmente con licencia MIT) integrado con los estilos Royal Iridescence.
+- 📦 Inventario inicial de **6 productos**, ampliable con nuevos registros. Estados calculados según existencias.
 - ☑️ Selección individual y selección conjunta de productos disponibles.
 - 🛒 Carrito lateral derecho con botón flotante y contador de unidades.
 - ➕➖ Aumento y disminución de cantidades, eliminación de artículos y vaciado del carrito.
 - ✅ **Compra simulada** con validación de cantidades y descuento de existencias.
 - 🔁 Actualización de indicadores y etiquetas del inventario después de la compra.
 - 💾 Conservación local del inventario y del carrito mediante `localStorage`.
-- ↩️ Restablecimiento del inventario original con confirmación.
+- ↩️ Restablecimiento de los seis artículos originales con confirmación; también elimina los registros nuevos.
 - ✨ Efectos dorados y tornasolados, estilos adaptables y soporte para movimiento reducido.
 
 ---
@@ -48,14 +54,43 @@ El diseño utiliza la identidad visual **Royal Iridescence**, con tonos ciruela,
 | 🏠 Inicio | `/` | Portada, indicadores, inventario y acceso al carrito |
 | 🏬 Nuestras tiendas | `/tiendas` | Valkora Norte, Valkora Centro y Valkora Costa |
 | ❔ Preguntas frecuentes | `/preguntas-frecuentes` | Inventario, sucursales, stock y compra simulada |
+| ➕ Registrar artículo | `/registrar-articulo` | Registro de nuevos artículos con validación |
+| 📦 Inventario completo | `/inventario` | Tabla compartida de nombre, marca, tipo y stock |
 
-La navegación utiliza `BrowserRouter` en `main.jsx`, `Routes` y `Route` en `App.jsx`, y `NavLink` en `BottomNav.jsx`. La cabecera y el menú permanecen visibles mientras cambia el contenido de la página.
+La navegación utiliza `BrowserRouter` en `main.jsx`, `Routes` y `Route` en `App.jsx`, y `NavLink` en `BottomNav.jsx`. El estado compartido está disponible en las cinco rutas a través de `ValkoraShopProvider`. La cabecera y el menú permanecen visibles mientras cambia el contenido de la página.
+
+---
+
+## 🚀 Ejecución local
+
+Desde la **raíz del repositorio** (`Valkora_Supermercado/`), donde se encuentra `package.json`:
+
+```shell
+npm ci
+npm run dev
+```
+
+Abre la dirección local que muestre Vite en la terminal. La entrada de `index.html` apunta a **`/Semana 2/src/main.jsx`**, de manera que se ejecuta la versión de esta entrega sin modificar la carpeta histórica de Semana 1.
+
+Para comprobar la compilación de producción:
+
+```shell
+npm run build
+```
+
+### Comprobación funcional sugerida
+
+1. Abre **Registrar artículo** y agrega un artículo con nombre, marca, tipo y stock válidos.
+2. Verifica que aparezca inmediatamente en **Inventario** y en **Inicio**.
+3. Agrégalo al carrito y confirma una compra simulada. Las existencias deben descontarse en ambas pantallas.
+4. Recarga la página para comprobar la persistencia local.
+5. Visita **Nuestras tiendas** y **Preguntas frecuentes** para confirmar que las páginas anteriores siguen disponibles.
 
 ---
 
 ## 📦 Inventario de productos
 
-Los datos iniciales están definidos en `products.js`.
+Los seis datos iniciales están definidos en `products.js`, ahora con `brand` y `type` además de los atributos que ya usaba el carrito. La marca ficticia de referencia es **Valkora**; los nuevos artículos aceptan cualquier marca y tipo válido.
 
 | Producto | Categoría | Stock inicial |
 |---|---|---:|
@@ -95,7 +130,9 @@ Mientras el panel está abierto, se bloquea el desplazamiento de la página de f
 ### Flujo funcional
 
 ```text
-Inventario inicial (products.js)
+Inventario inicial + artículos registrados
+             ↓
+   Estado global: ValkoraShopProvider
              ↓
    Selección en Home.jsx
              ↓
@@ -122,15 +159,15 @@ Inventario inicial (products.js)
 
 ## 💾 Persistencia local
 
-El estado se administra en el hook `useValkoraShop.js` y se conserva bajo la clave:
+El estado se administra en `ValkoraShopProvider` y se consume mediante `useValkoraShop.js`. Se conserva bajo la clave:
 
 ```text
-valkora:supermercado:demo:v1
+valkora:supermercado:demo:v2
 ```
 
-Se almacenan las cantidades actuales del inventario y las cantidades del carrito. Al recuperar información guardada, el código valida los identificadores y limita las cantidades a los valores aceptados por el catálogo.
+Se migran automáticamente, cuando existen, el carrito y las existencias de la clave anterior `valkora:supermercado:demo:v1`. Se almacenan los artículos del inventario y las cantidades del carrito. Al recuperar información guardada, el código valida los identificadores y limita las cantidades a los valores aceptados por el catálogo.
 
-El botón **Restablecer inventario demo** pide confirmación y recupera las cantidades iniciales, dejando el carrito vacío. La información permanece en el navegador utilizado: no hay base de datos, backend, pagos ni sincronización entre usuarios o dispositivos.
+El botón **Restablecer inventario demo** pide confirmación, elimina los artículos registrados en esta semana y recupera las cantidades de los seis artículos originales, dejando el carrito vacío. La información permanece en el navegador utilizado: no hay base de datos, backend, pagos ni sincronización entre usuarios o dispositivos.
 
 ---
 
@@ -144,9 +181,12 @@ El botón **Restablecer inventario demo** pide confirmación y recupera las cant
 | `components/BrandMark.jsx` | Emblema SVG de la marca |
 | `components/MetricIcon.jsx` | Iconografía del resumen de inventario |
 | `components/CartPanel.jsx` | Carrito lateral, controles y gestión del foco |
-| `hooks/useValkoraShop.js` | Estado del carrito, validaciones, persistencia y compra simulada |
+| `hooks/useValkoraShop.js` | Context API, estado global del inventario y carrito, migración, registro y compra simulada |
 | `data/products.js` | Datos iniciales y función para clasificar el stock |
 | `pages/Home.jsx` | Portada, indicadores y selección de productos |
+| `pages/RegisterArticle.jsx` | Formulario para incorporar artículos al estado global |
+| `pages/Inventory.jsx` | Tabla completa con nombre, marca, tipo, stock y estado |
+| `vendor/bootstrap.min.css` | Framework CSS Bootstrap 5.3.6 (MIT) |
 | `pages/Stores.jsx` | Información de las tres sucursales |
 | `pages/FAQ.jsx` | Cuatro preguntas frecuentes |
 | `styles/index.css` | Estilos generales, efectos visuales y adaptación de pantallas |
@@ -155,7 +195,8 @@ El botón **Restablecer inventario demo** pide confirmación y recupera las cant
 
 | Recurso | Uso en Valkora |
 |---|---|
-| `useState` | Estado de la tienda y apertura del carrito |
+| `useState` | Estado global de la tienda, datos del formulario y apertura del carrito |
+| `createContext` / `useContext` | Inventario y carrito compartidos en todas las rutas |
 | `useEffect` | Persistencia y eventos del panel lateral |
 | `useRef` | Foco del carrito y restauración del foco anterior |
 | `useCallback` | Función estable de cierre del carrito |
@@ -166,7 +207,9 @@ El botón **Restablecer inventario demo** pide confirmación y recupera las cant
 
 ---
 
-## 🗂️ Estructura publicada en GitHub
+## 🗂️ Estructura del repositorio y archivos de Semana 2
+
+La carpeta `Semana 1/` representa la entrega anterior conservada en GitHub. El árbol detalla únicamente los archivos fuente de la Semana 2; las dependencias y archivos de compilación no se incluyen.
 
 <details>
 <summary><strong>Ver archivos del repositorio</strong></summary>
@@ -178,7 +221,9 @@ Valkora_Supermercado/
 ├── package.json
 ├── package-lock.json
 ├── vite.config.js
-└── Semana 1/
+├── Semana 1/                    # Entrega anterior preservada en GitHub
+│   └── src/                     # Código original de la Semana 1
+└── Semana 2/
     └── src/
         ├── App.jsx
         ├── main.jsx
@@ -196,7 +241,11 @@ Valkora_Supermercado/
         ├── pages/
         │   ├── Home.jsx
         │   ├── Stores.jsx
-        │   └── FAQ.jsx
+        │   ├── FAQ.jsx
+        │   ├── RegisterArticle.jsx
+        │   └── Inventory.jsx
+        ├── vendor/
+        │   └── bootstrap.min.css
         └── styles/
             └── index.css
 ```
@@ -207,7 +256,9 @@ Valkora_Supermercado/
 
 ## ✨ Identidad visual
 
-La estética **Royal Iridescence** combina un encabezado y un menú inferior en ciruela y burdeo, superficies marfil, detalles dorados y reflejos perlados. Incluye un emblema SVG, una imagen decorativa de una cesta con productos, destellos animados y acabados cromáticos en secciones y tarjetas.
+La estética **Royal Iridescence** se mantiene de la Semana 1. Bootstrap aporta el sistema de grilla, formulario, botones, alertas y tabla adaptable de las nuevas pantallas, sin sustituir los acabados de la marca.
+
+La estética combina un encabezado y un menú inferior en ciruela y burdeo, superficies marfil, detalles dorados y reflejos perlados. Incluye un emblema SVG, una imagen decorativa de una cesta con productos, destellos animados y acabados cromáticos en secciones y tarjetas.
 
 La interfaz contempla pantallas pequeñas: la tabla permite desplazamiento horizontal dentro de su contenedor y el carrito lateral adapta su ancho. Las reglas CSS de `prefers-reduced-motion` reducen las transiciones y animaciones cuando el sistema así lo solicita.
 
@@ -222,6 +273,7 @@ La interfaz contempla pantallas pequeñas: la tabla permite desplazamiento horiz
 <img src="https://img.shields.io/badge/React_Router-7-CA4245?style=for-the-badge&logo=reactrouter&logoColor=white" alt="React Router 7">
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript">
 <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5">
+<img src="https://img.shields.io/badge/Bootstrap-5.3.6-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap 5.3.6">
 <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3">
 
 </div>
@@ -232,7 +284,7 @@ La interfaz contempla pantallas pequeñas: la tabla permite desplazamiento horiz
 
 ### 👑 Valkora · Supermercados
 
-**Desarrollo Frontend II · PFY2202 · Semana 1**
+**Desarrollo Frontend II · PFY2202 · Semana 2**
 
 Natalia Alvarado · 2026
 
